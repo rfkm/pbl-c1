@@ -6,5 +6,7 @@ gulp.task('copy', function() {
 	    .pipe(gulp.dest('dist/public'));
     var v = gulp.src('src/views/**')
 	    .pipe(gulp.dest('dist/views'));
-    return merge(p, v);
+    var s = gulp.src('src/*.coffee')
+	    .pipe(gulp.dest('dist'));
+    return merge(p, v, s);
 });

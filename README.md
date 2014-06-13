@@ -21,9 +21,17 @@ $ npm install -g gulp
 $ gulp
 ```
 
-## How to run
+## How to run the server
 
 ```bash
-$ cd dist
-$ PORT=5000 node server.js
+$ gulp nodemon
+```
+
+## Other useful tasks
+
+### watch
+
+build + run + livereload
+```bash
+$ gulp watch
 ```

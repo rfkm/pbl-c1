@@ -1,10 +1,12 @@
 express = require 'express'
 app = express()
 server = require('http').Server app
-io = require('socket.io')(server)
+io = require('socket.io')()
 device  = require('express-device')
 
+
 runningPortNumber = process.env.PORT or 3000
+wsPort = process.env.WS_PORT or 4321
 
 app.use express.static "#{__dirname}/public"
 
@@ -20,12 +22,14 @@ app.use (req, res, next) ->
 app.get "/", (req, res) ->
 	res.render 'index', {}
 
-io.sockets.on 'connection', (socket) ->
-	io.sockets.emit 'blast', {mst: "someone connected"}
-
-	socket.on 'blast', (data, fun) ->
+io.on 'connection', (socket) ->
+	console.log 'a user connected'
+	socket.on 'chat', (data) ->
 		console.log data
-		io.sockets.emit 'blast', {msg: data.msg}
-		fn()
+		socket.emit 'chat', { msg: data.msg }
 
-server.listen runningPortNumber
+
+io.listen wsPort
+
+server.listen runningPortNumber, ->
+	console.log 'listening on *:' + runningPortNumber
