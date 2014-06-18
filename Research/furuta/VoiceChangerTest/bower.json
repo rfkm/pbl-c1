@@ -1,0 +1,9 @@
+{
+    "name": "VoiceChangerTest",
+    "version": "1.0.0",
+    "dependencies": {
+        "jquery": "*",
+        "lodash": "*",
+        "bootstrap": "*",
+    }
+}
