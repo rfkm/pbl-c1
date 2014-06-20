@@ -1,27 +1,9 @@
+var _ = require('lodash');
 
-/*
- * GET home page.
- */
+var files = ['_index.js', 'upload.js'];
 
-var uuid = require('uuid');
-var mongoose = require('mongoose');
+exports.routes = _.map(files, function(f){
+  return require('./' + f);
+});
 
-var User = mongoose.model('User');
-
-exports.get_url = '/';
-
-exports.index = function(req, res){
-  var uid = req.cookies.uid;
-  if(!uid) {
-    var newuid = uuid.v4();
-    console.log('generated new uuid: ' + newuid);
-    res.cookie('uid', newuid, {maxAge: 60000, httpOnly: false});
-    var user = new User({
-      uid: newuid
-    });
-    user.save();
-    uid = newuid;
-  }
-
-  res.render('index', { title: 'VoiceSenderTest', uid: uid });
-};
+console.log('routes loaded');

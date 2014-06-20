@@ -4,7 +4,6 @@
  */
 
 var express = require('express')
-, routes = require('./routes')
 , user = require('./routes/user')
 , http = require('http')
 , mongoose = require('mongoose')
@@ -26,6 +25,9 @@ app.use(express.session({ secret: 'voicesender-test-hogehogefugafuga'}));
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 
+// load model
+require('./models');
+
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
@@ -39,65 +41,6 @@ var getHash = function(s){
   return sha.digest('hex');
 }
 
-// authentication
-var flash = require('connect-flash'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
-
-// database
-var db = mongoose.connect('mongodb://localhost/voicesendertest');
-var Schema = mongoose.Schema;
-var UserSchema = new Schema({
-  email: {type: String, required: true},
-  password: {type: String, required: true}
-});
-var User = db.model('User', UserSchema);
-
-User.count({}, function(err, cnt){
-  console.log('user.count: ' + cnt);
-  if (cnt <= 1){
-    console.log('create admin user');
-    var admin = new User({
-      email: "hoge@fuga.com",
-      password: getHash("admin")
-    });
-    admin.save();
-  }
-});
-
-passport.serializeUser(function(user, done){
-  done(null, {email: user.email, _id: user._id});
-});
-passport.deserializeUser(function(serializedUser, done){
-  User.findById(serializedUser._id, function(err, user){
-    done(err, user);
-  });
-});
-passport.use(new LocalStrategy(
-  {usernameField: 'email', passwordField: 'password'},
-  function(email, password, done){
-    process.nextTick(function(){
-      User.findOne({email: email}, function(err, user){
-        if (err) return done(err);
-        if(!user) return done(null, false,{message: "User not found."});
-        var hashedPassword = getHash(password);
-        console.log(user.password);
-        console.log(hashedPassword);
-        if (user.password !== hashedPassword)
-          return done(null, false, {message: "Wrong password."});
-        return done(null, user);
-      });
-    });
-  }));
-var isLoggedin = function(req, res, next){
-  if(req.isAuthenticated()) return next();
-  res.redirect('/login');
-};
-
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -106,26 +49,35 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-//app.get('/users', user.list);
-// app.get('/login', function(req, res){
-//     res.render('login', {user: req.user, message: req.flash('error')});
-// });
-// app.post('/login',
-//         passport.authenticate('local', {failureRedirect: '/login', failureFlash: true}),
-//         function(req, res){
-//             console.log('logged in. redirect to index.');
-//             res.redirect('/');
-//         });
-// app.get('/logout', function(req, res){
-//     req.logout();
-//     res.redirect('/');
-// });
+var routes = require('./routes');
+routes.routes.forEach(function(r) {
+  if (r.get_url && r.get) {
+    if (r.get_url instanceof Array) {
+      r.get_url.forEach(function(u) {
+        app.get(u, r.get);
+      });
+    }
+    else {
+      app.get(r.get_url, r.get);
+    }
+  }
+  if (r.post_url && r.post) {
+    if (r.post_url instanceof Array) {
+      r.post_url.forEach(function(u) {
+        app.post(u, r.post);
+      });
+    }
+    else {
+      app.post(r.post_url, r.post);
+    }
+  }
+});
 
 var processAudio = function(uid){
   // audio process here (i.e. pitch sift)
 }
 
+// for realtime connection (currently unused)
 var tempaudio = {};
 io.on('connection', function(ws){
   ws.on('voice', function(m){
