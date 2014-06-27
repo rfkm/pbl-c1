@@ -1,21 +1,33 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <section class="container">
-      <button id="voice" class="btn btn-primary">Start!</button>
-    </section>
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bower_components/lodash/dist/lodash.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <!-- <script src="/javascripts/VoiceChanger.js"></script> -->
-    <script src="/javascripts/VoiceSender.js"></script>
-  </body>
-</html>
+<% include header %>
+
+<div class="container well" style="background: red well">
+  <h2 align="center">録音てすと♥</h2>
+
+  <div class="row">
+    <div class="col-md-12" align="center">
+      <!-- Get local audio/video stream -->
+      <div id="step1">
+        <h1 style="color: red">マイクを許可しておくれ</h1>
+        <div id="step1-error">
+          <h3 style="color: red">ERROR:ブラウザーがWebRTCに対応しているか、またはhttpサーバー上で稼働しているか確認</h3>
+          <a href="#" class="pure-button pure-button-error" id="step1-retry">Try again</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" align="center">
+      <p>録音ボタンを押下している間だけ録音する。録音後にページ下部にて再生、ダウンロードをすることができる。</p>
+      <button id="captureButton" type="button" class="btn btn-danger btn-lg">
+        <span style="font-size: 50px">録音</span>
+      </button>
+    </div>
+  </div>
+
+  <br> <br>
+  <p>---録音ファイル---</p>
+  <div id="files"></div>
+</div>
+
+<% locals.JS_FILES = ["/javascripts/recorder.js", "/javascripts/index.js"]; %>
+<% include footer %>

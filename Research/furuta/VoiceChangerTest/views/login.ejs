@@ -1,0 +1,12 @@
+<% include header %>
+
+<p>Status: <%= message %></p>
+<section class="container">
+  <form action="/login" method="post">
+    <input type="text" name="email" placeholder="Email Address">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit" value="Login" class="btn btn-primary">Login</button>
+  </form>
+</section>
+
+<% include footer %>

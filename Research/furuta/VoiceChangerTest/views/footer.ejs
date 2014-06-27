@@ -1,0 +1,12 @@
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/jquery-cookie/jquery.cookie.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <% if (locals.JS_FILES) { %>
+    <%   for(var i = 0; i < JS_FILES.length; ++i){ %>
+       <script src="<%- JS_FILES[i] %>"></script>
+    <%   } %>
+    <% } %>
+    </body>
+</html>

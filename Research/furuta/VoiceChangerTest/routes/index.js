@@ -1,8 +1,9 @@
+var _ = require('lodash');
 
-/*
- * GET home page.
- */
+var files = ['_index.js', 'upload.js'];
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
-};
+exports.routes = _.map(files, function(f){
+  return require('./' + f);
+});
+
+console.log('routes loaded');
