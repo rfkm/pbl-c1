@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>pbl-c1</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+
+    <!--[if lt IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div id="container">
+      <h1>pbl-c1</h1>
+      <div>
+        <p>UserId: {{userid}}</p>
+      </div>
+      <div v-show="standby">
+        <input type="text" placeholder="Type your name" v-model="username" />
+        <div>
+          <button v-on="click: join">Join</button>
+          </div>
+      </div>
+      <div v-show="waiting" v-cloak>
+        <p>処理中...</p>
+        <div>
+          <button v-on="click: cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <script src="js/build.js"></script>
+
+  </body>
+</html>

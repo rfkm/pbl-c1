@@ -9,22 +9,16 @@ pbl-c1-server
 $ npm install
 ```
 
-### Install gulp
-
-```bash
-$ npm install -g gulp
-```
-
 ### Run build task
 
 ```bash
-$ gulp
+$ npm run build
 ```
 
 ## How to run the server
 
 ```bash
-$ gulp nodemon
+$ npm run serve
 ```
 
 ## Other useful tasks
@@ -33,5 +27,5 @@ $ gulp nodemon
 
 build + run + livereload
 ```bash
-$ gulp watch
+$ npm run watch
 ```
